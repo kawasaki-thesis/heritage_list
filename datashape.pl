@@ -5,8 +5,8 @@ use utf8;
 #CSV“Ç‚İ‚İ
 
 $inputfile="C:/Users/sayak/work/heritage_list/data/EasternAsia_wiki.csv";
-$i = 0;
-$j = 0;
+$i=0;
+$j=0;
 
 #################
 #heritage‚Ìƒf[ƒ^
@@ -34,15 +34,14 @@ while(<IN>){
 	chomp;
 	@list = split(/,/);
 	foreach(@list){
-		if($j=0){
+		if($j==0){
+			print "$_\n";
 			$heritage[$i][0]=$_;
-			$heritage[$i][1]=0;
-			$heritage[$i][2]=0;
-			$heritage[$i][3]=0;
-			$heritage[$i][4]=0;
-		}elsif($_ = ~ /Cultual|Natural/){
-			@class = split(/(||)/);
+		}elsif(/Cultural|Natural/){
+			@class = split(/\(/);
 			foreach $roman (@class){
+				chop($roman);
+				print "$roman\n";
 				if($roman eq "i"){ $heritage[$i][$c1]=1;
 				}elsif($roman eq "ii"){ $heritage[$i][$c2]=1;
 				}elsif($roman eq "iii"){ $heritage[$i][$c3]=1;
@@ -58,6 +57,7 @@ while(<IN>){
 				if($heritage[$i][$k]!=1){$heritage[$i][$k]=0;}
 			}
 		}
+		$j++;
 	}
 	$i++;
 	$j=0;
