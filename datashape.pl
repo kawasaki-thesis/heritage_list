@@ -29,7 +29,7 @@ $c10=14;
 
 #CSV“Ç‚İ‚İ
 
-$inputfile="C:/Users/sayak/work/heritage_list/data/EasternAsia_wiki.csv";
+$inputfile="C:/Users/sayak/work/heritage_list/data/all_wiki.csv";
 $i=0;
 $j=0;
 $aflg==0;
