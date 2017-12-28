@@ -2,12 +2,6 @@
 use Encode;
 use utf8;
 
-#CSV読み込み
-
-$inputfile="C:/Users/sayak/work/heritage_list/data/EasternAsia_wiki.csv";
-$i=0;
-$j=0;
-
 #################
 #heritageのデータ
 #0 name
@@ -15,6 +9,7 @@ $heritage_name = 0;
 #1 area
 $country = 1;
 #2 subarea
+$area = 2;
 #3 n
 $ido = 3;
 #4 e
@@ -32,6 +27,13 @@ $c9=13;
 $c10=14;
 #################
 
+#CSV読み込み
+
+$inputfile="C:/Users/sayak/work/heritage_list/data/EasternAsia_wiki.csv";
+$i=0;
+$j=0;
+$aflg==0;
+
 open(IN,$inputfile) || die "$!";
 
 while(<IN>){
@@ -41,20 +43,19 @@ while(<IN>){
 		$_ =~ s/^\s*//;
 		if($j==0){
 			$_ =~ tr/^\"//d;
-			$heritage[$i][$heritage_name]=$_;
-		}elsif($j==1||2||3){
-			print "$_\n";
-		}elsif(/^\?[A-Z]/){
+			$heritage[$i][$heritage_name]='\'' . $_ . '\'';
+		}elsif(/([0-9]+.[0-9]+)..E/){
 			#@area = split(/\s/);
 			#国名部分を取得
 			$_ =~/([A-Z][a-z]+(\s[A-Z][a-z]+)*)/;
 			$heritage[$i][$country] = $1;
 			#北緯部分を取得
 			$_ =~ /([0-9]+.[0-9]+)..N/;
-			$heritage[$i][$ido] = $1;
+			$heritage[$i][$ido] = '\'' . $1 . '\'';
 			#東経部分を取得
 			$_ =~ /([0-9]+.[0-9]+)..E/;
 			$heritage[$i][$keido] = $1;
+			$aflg=1;
 		}elsif(/Cultural|Natural/){
 			@class = split(/\(/);
 			foreach $roman (@class){
@@ -73,28 +74,23 @@ while(<IN>){
 			for($k=$c1; $k<=$c10; $k++){
 				if($heritage[$i][$k]!=1){$heritage[$i][$k]=0;}
 			}
+		}elsif($aflg==0){
+			$_ =~ tr/^\"||\;||\*||\)||\(//d;
+			$heritage[$i][$area]= $heritage[$i][$area] . " , " . $_;
 		}
 		$j++;
 	}
+	$heritage[$i][$area] =~ s/^(\s(\,\s*)*)//;
+	$heritage[$i][$area] ='\'' . $heritage[$i][$area] . '\'';
 	$i++;
 	$j=0;
-=pod
-	@list = split(/,/);
-	
-	if($list[1] =~ /NN|VV|JJ|NP/){
-		$heritage[$i][$j] = $list[2];
-		$j++;
-	}
-=cut
+	$aflg=0;
 }
 close(IN);
 
-
-
-#コーパスを標準出力
+#配列をカンマ区切りで標準出力
 foreach (@heritage){
-	print "(" . join(", ", @{$_}) . ")\n";
+	print "INSERT INTO world_heritage VALUES(" . join(", ", @{$_}) . ")\n";
 	#jをカンマで横に並べてi行表示
 }
-
 #end
