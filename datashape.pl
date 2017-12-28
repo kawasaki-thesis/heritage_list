@@ -48,15 +48,15 @@ while(<IN>){
 			#@area = split(/\s/);
 			#‘–¼•”•ª‚ğæ“¾
 			$_ =~/([A-Z][a-z]+(\s[A-Z][a-z]+)*)/;
-			$heritage[$i][$country] = $1;
+			$heritage[$i][$country] = '\'' . $1 . '\'';
 			#–kˆÜ•”•ª‚ğæ“¾
-			$_ =~ /([0-9]+.[0-9]+)..[N,S]/;
-			$heritage[$i][$ido] = '\'' . $1 . '\'';
+			$_ =~ /([0-9,\.]+)..[N,S]\s([0-9,\.]+)..[W,E]/;
+			$heritage[$i][$ido] = $1;
 			#“ŒŒo•”•ª‚ğæ“¾
-			$_ =~ /([0-9]+.[0-9]+)..[W,E]/;
-			$heritage[$i][$keido] = $1;
+			#$_ =~ /([0-9,\.]+[‹][W,E])/;
+			$heritage[$i][$keido] = $2;
 			$aflg=1;
-		}elsif(/Cultural|Natural/){
+		}elsif(/Cultural|Natural||Mixed/){
 			@class = split(/\(/);
 			foreach $roman (@class){
 				chop($roman);
