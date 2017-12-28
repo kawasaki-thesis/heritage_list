@@ -42,20 +42,19 @@ while(<IN>){
 		if($j==0){
 			$_ =~ tr/^\"//d;
 			$heritage[$i][$heritage_name]=$_;
+		}elsif($j==1||2||3){
+			print "$_\n";
 		}elsif(/^\?[A-Z]/){
 			#@area = split(/\s/);
 			#‘–¼•”•ª‚ğæ“¾
 			$_ =~/([A-Z][a-z]+(\s[A-Z][a-z]+)*)/;
 			$heritage[$i][$country] = $1;
-			print "$1\n";
 			#–kˆÜ•”•ª‚ğæ“¾
 			$_ =~ /([0-9]+.[0-9]+)..N/;
 			$heritage[$i][$ido] = $1;
-			print "$1\n";
 			#“ŒŒo•”•ª‚ğæ“¾
 			$_ =~ /([0-9]+.[0-9]+)..E/;
 			$heritage[$i][$keido] = $1;
-			print "$1\n";
 		}elsif(/Cultural|Natural/){
 			@class = split(/\(/);
 			foreach $roman (@class){
