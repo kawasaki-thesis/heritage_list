@@ -11,10 +11,14 @@ $j=0;
 #################
 #heritageのデータ
 #0 name
+$heritage_name = 0;
 #1 area
+$country = 1;
 #2 subarea
 #3 n
+$ido = 3;
 #4 e
+$keido = 4;
 #5~14 classflag
 $c1=5;
 $c2=6;
@@ -34,14 +38,24 @@ while(<IN>){
 	chomp;
 	@list = split(/,/);
 	foreach(@list){
+		$_ =~ s/^\s*//;
 		if($j==0){
-			print "$_\n";
-			$heritage[$i][0]=$_;
+			$heritage[$i][$heritage_name]=$_;
+		}elsif(/^\?[A-Z]/){
+			@area = split(/\s/);
+			#国名から余計な文字を抜いて取得
+			$area[0] =~ /([A-Z][a-z]+)/;
+			$heritage[$i][$country] = $1;
+			#北緯から余計な文字を抜いて取得
+			$area[4] =~ /([0-9]+.[0-9]+)/;
+			$heritage[$i][$ido] = $1;
+			#東経から余計な文字を抜いて取得
+			$area[5] =~ /([0-9]+.[0-9]+)/;
+			$heritage[$i][$keido] = $1;
 		}elsif(/Cultural|Natural/){
 			@class = split(/\(/);
 			foreach $roman (@class){
 				chop($roman);
-				print "$roman\n";
 				if($roman eq "i"){ $heritage[$i][$c1]=1;
 				}elsif($roman eq "ii"){ $heritage[$i][$c2]=1;
 				}elsif($roman eq "iii"){ $heritage[$i][$c3]=1;
