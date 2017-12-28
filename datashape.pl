@@ -49,11 +49,9 @@ while(<IN>){
 			#国名部分を取得
 			$_ =~/([A-Z][a-z]+(\s[A-Z][a-z]+)*)/;
 			$heritage[$i][$country] = '\'' . $1 . '\'';
-			#北緯部分を取得
+			#緯度経度部分を取得
 			$_ =~ /([0-9,\.]+)..[N,S]\s([0-9,\.]+)..[W,E]/;
 			$heritage[$i][$ido] = $1;
-			#東経部分を取得
-			#$_ =~ /([0-9,\.]+[°][W,E])/;
 			$heritage[$i][$keido] = $2;
 			$aflg=1;
 		}elsif(/Cultural|Natural||Mixed/){
