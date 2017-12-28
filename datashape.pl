@@ -40,18 +40,22 @@ while(<IN>){
 	foreach(@list){
 		$_ =~ s/^\s*//;
 		if($j==0){
+			$word =~ tr/a-z//d;
 			$heritage[$i][$heritage_name]=$_;
 		}elsif(/^\?[A-Z]/){
 			@area = split(/\s/);
 			#国名から余計な文字を抜いて取得
 			$area[0] =~ /([A-Z][a-z]+)/;
 			$heritage[$i][$country] = $1;
+			print "$1\n";
 			#北緯から余計な文字を抜いて取得
 			$area[4] =~ /([0-9]+.[0-9]+)/;
 			$heritage[$i][$ido] = $1;
+			print "$1\n";
 			#東経から余計な文字を抜いて取得
 			$area[5] =~ /([0-9]+.[0-9]+)/;
 			$heritage[$i][$keido] = $1;
+			print "$1\n";
 		}elsif(/Cultural|Natural/){
 			@class = split(/\(/);
 			foreach $roman (@class){
