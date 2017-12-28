@@ -88,7 +88,7 @@ close(IN);
 
 #配列をカンマ区切りで標準出力
 foreach (@heritage){
-	print "INSERT INTO world_heritage VALUES(" . join(", ", @{$_}) . ")\n";
+	print "INSERT INTO world_heritage VALUES(" . join(", ", @{$_}) . ");\n";
 	#jをカンマで横に並べてi行表示
 }
 
