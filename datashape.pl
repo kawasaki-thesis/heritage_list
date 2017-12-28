@@ -54,7 +54,7 @@ while(<IN>){
 			$heritage[$i][$ido] = $1;
 			$heritage[$i][$keido] = $2;
 			$aflg=1;
-		}elsif(/Cultural|Natural||Mixed/){
+		}elsif(/Cultural|Natural|Mixed/){
 			@class = split(/\(/);
 			foreach $roman (@class){
 				chop($roman);
@@ -74,11 +74,11 @@ while(<IN>){
 			}
 		}elsif($aflg==0){
 			$_ =~ tr/^\"||\;||\*||\)||\(//d;
-			$heritage[$i][$area]= $heritage[$i][$area] . " , " . $_;
+			$heritage[$i][$area]= $heritage[$i][$area] . ", " . $_;
 		}
 		$j++;
 	}
-	$heritage[$i][$area] =~ s/^(\s(\,\s*)*)//;
+	$heritage[$i][$area] =~ s/^((\,\s*)*)//;
 	$heritage[$i][$area] ='\'' . $heritage[$i][$area] . '\'';
 	$i++;
 	$j=0;
@@ -91,4 +91,5 @@ foreach (@heritage){
 	print "INSERT INTO world_heritage VALUES(" . join(", ", @{$_}) . ")\n";
 	#jをカンマで横に並べてi行表示
 }
+
 #end
