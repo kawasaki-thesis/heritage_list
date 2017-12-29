@@ -92,7 +92,6 @@ for($a=0; $a<3; $a++){
 	for($b=0; $b<$i; $b++){
 	if ($heritage[$b][$a] =~ /\'/){
 		$heritage[$b][$a] =~ s/\'/\'\'/g;
-		print $heritage[$b][$a] . "\n";
 	}
 	$heritage[$b][$a] ='\'' . $heritage[$b][$a] . '\'';
 	}
