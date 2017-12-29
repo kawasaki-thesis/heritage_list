@@ -44,7 +44,7 @@ while(<IN>){
 		if($j==0){
 			$_ =~ tr/^\"//d;
 			$heritage[$i][$heritage_name]='\'' . $_ . '\'';
-		}elsif(/([0-9]+.[0-9]+)..[A-Z]/){
+		}elsif(/[0-9,\.]+..[N,S]\s[0-9,\.]+..[W,E]/){
 			#@area = split(/\s/);
 			#‘–¼•”•ª‚ğæ“¾
 			$_ =~/([A-Z][a-z]+(\s[A-Z][a-z]+)*)/;
@@ -72,6 +72,7 @@ while(<IN>){
 			for($k=$c1; $k<=$c10; $k++){
 				if($heritage[$i][$k]!=1){$heritage[$i][$k]=0;}
 			}
+			$aflg=1;
 		}elsif($aflg==0){
 			$_ =~ tr/^\"||\;||\*||\)||\(//d;
 			$heritage[$i][$area]= $heritage[$i][$area] . ", " . $_;
