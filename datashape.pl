@@ -43,12 +43,12 @@ while(<IN>){
 		$_ =~ s/^\s*//;
 		if($j==0){
 			$_ =~ tr/^\"//d;
-			$heritage[$i][$heritage_name]='\'' . $_ . '\'';
+			$heritage[$i][$heritage_name]=$_;
 		}elsif(/[0-9,\.]+..[N,S]\s[0-9,\.]+..[W,E]/){
 			#@area = split(/\s/);
 			#国名部分を取得
 			$_ =~/([A-Z][a-z]+(\s[A-Z][a-z]+)*)/;
-			$heritage[$i][$country] = '\'' . $1 . '\'';
+			$heritage[$i][$country] = $1;
 			#緯度経度部分を取得
 			$_ =~ /([0-9,\.]+)..[N,S]\s([0-9,\.]+)..[W,E]/;
 			$heritage[$i][$ido] = $1;
@@ -69,23 +69,34 @@ while(<IN>){
 				}elsif($roman eq "ix"){ $heritage[$i][$c9]=1;
 				}elsif($roman eq "x"){ $heritage[$i][$c10]=1;}
 			}
+			#クラス表示がないところを０に
 			for($k=$c1; $k<=$c10; $k++){
 				if($heritage[$i][$k]!=1){$heritage[$i][$k]=0;}
 			}
 			$aflg=1;
-		}elsif($aflg==0){
+		}elsif($aflg==0 && $_ =~ /[A-Za-z]/){
 			$_ =~ tr/^\"||\;||\*||\)||\(//d;
 			$heritage[$i][$area]= $heritage[$i][$area] . ", " . $_;
 		}
 		$j++;
 	}
 	$heritage[$i][$area] =~ s/^((\,\s*)*)//;
-	$heritage[$i][$area] ='\'' . $heritage[$i][$area] . '\'';
 	$i++;
 	$j=0;
 	$aflg=0;
 }
 close(IN);
+
+#sql用にクオーテーションをエスケープ
+for($a=0; $a<3; $a++){
+	for($b=0; $b<$i; $b++){
+	if ($heritage[$b][$a] =~ /\'/){
+		$heritage[$b][$a] =~ s/\'/\'\'/g;
+		print $heritage[$b][$a] . "\n";
+	}
+	$heritage[$b][$a] ='\'' . $heritage[$b][$a] . '\'';
+	}
+}
 
 #国名や緯度経度が正しくなさそうな行番号を配列damenumに記憶
 for($j=0; $j<$i; $j++){
