@@ -87,47 +87,38 @@ while(<IN>){
 }
 close(IN);
 
-$k=0;
-for($j=0; $j<=$i; $j++){
-	if($heritage[$j][3] !~ /[0-9]/||$heritage[$j][4] !~ /[0-9]/){
-		$dame[$k][2]=$heritage[$j][3];
-		$dame[$k][3]=$heritage[$j][4];
-		$dame[$k][4]=$heritage[$j][1];
-		$dame[$k][5]=$heritage[$j][2];
-		$dame[$k][0]=$j;
-		$k++;
+#国名や緯度経度が正しくなさそうな行番号を配列damenumに記憶
+for($j=0; $j<$i; $j++){
+	if($heritage[$j][0] !~ /[A-Za-z]/||$heritage[$j][1] !~ /[A-Za-z]/||$heritage[$j][3] !~ /[0-9]/||$heritage[$j][4] !~ /[0-9]/){
+		push(@damenum,$j);
 	}
 }
 
+#もう一度ファイルを読み、正しくなさそうなデータを別に表示して配列から消す
 $i=0;
 $j=0;
 open(IN,$inputfile) || die "$!";
-
-while($buff=<IN>){
-	chomp($buff);
-	if($dame[$j][0]==$i){
-		$dame[$j][1]=$buff;
+while(<IN>){
+	chomp;
+	if($damenum[$j]==$i){
+		print "INSERT INTO world_heritage VALUES(" . join(", ", @{$heritage[$i]}) . ");\n";
+		print;
+		print "\n\n";
+		delete(@heritage[$i]);
 		$j++;
 	}
 	$i++;
 }
 close($buff);
 
-foreach (@dame){
-	print @{$_}[0] . "\n";
-	print "str: @{$_}[1]\n";
-	print "lontitude: @{$_}[2]\n";
-	print "latitude: @{$_}[3]\n";
-	print "area: @{$_}[4]\n";
-	print "subarea: @{$_}[5]\n---\n";
-	#jをカンマで横に並べてi行表示
+print "------ $j error -------------------------\n\n";
+
+#正しそうなデータをINSERTINTOで出力
+foreach (@heritage){
+	if(@{$_}){
+		print "INSERT INTO world_heritage VALUES(" . join(", ", @{$_}) . ");\n";
+		#jをカンマで横に並べてi行表示
+	}
 }
 
-=pod
-#配列をカンマ区切りで標準出力
-foreach (@heritage){
-	print "INSERT INTO world_heritage VALUES(" . join(", ", @{$_}) . ");\n";
-	#jをカンマで横に並べてi行表示
-}
-=cut
 #end
