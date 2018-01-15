@@ -5,6 +5,8 @@ CREATE TABLE world_heritage(
   area text,
   longitude numeric,
   latitude numeric,
+  img_url text,
+  description text,
   c1 integer,
   c2 integer,
   c3 integer,
