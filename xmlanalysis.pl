@@ -74,9 +74,22 @@ for (@$list_ref){
 	#print %{$_}{'site'};
 	$heritage[$i][$heritage_name] = %{$_}{'site'};
 	$heritage[$i][$country] = %{$_}{'states'};
-	$heritage[$i][$area] = %{$_}{'location'};
-	$heritage[$i][$ido] = %{$_}{'latitude'};
-	$heritage[$i][$keido] = %{$_}{'longitude'};
+	$heritage[$i][$area] = %{$_}{'region'};
+	if(%{$_}{'latitude'} =~ /[0-9][0-9][0-9][0-9]/){
+		$heritage[$i][$ido] = %{$_}{'latitude'};
+	}else{
+		print Dumper(%{$_}{'latitude'});
+		print %{$_}{'site'};
+		print " / latitude \n";
+	}
+	if(%{$_}{'longitude'} =~ /[0-9][0-9][0-9][0-9]/){
+		$heritage[$i][$keido] = %{$_}{'longitude'};
+	}else{
+		print Dumper(%{$_}{'longitude'});
+		print %{$_}{'site'};
+		print " / longitude \n";
+	}
+	
 	#criterion
 	@class = split(/\(/, %{$_}{'criteria_txt'});
 	foreach $roman (@class){
@@ -98,14 +111,24 @@ for (@$list_ref){
 	}
 	$i++;
 }
+#sql用にクオーテーションをエスケープ
+for($a=0; $a<3; $a++){
+	for($b=0; $b<$i; $b++){
+	if ($heritage[$b][$a] =~ /\'/){
+		$heritage[$b][$a] =~ s/\'/\'\'/g;
+	}
+	$heritage[$b][$a] ='\'' . $heritage[$b][$a] . '\'';
+	}
+}
 
+print "------ $j error -------------------------\n\n";
 
 #正しそうなデータをINSERTINTOで出力
 foreach (@heritage){
 	if(@{$_}){
-		#print "INSERT INTO world_heritage VALUES(";
+		print "INSERT INTO world_heritage VALUES(";
 		print join(", ", @{$_});
-		#print ");"
+		print ");";
 		print"\n";
 		#jをカンマで横に並べてi行表示
 	}
