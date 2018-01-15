@@ -47,23 +47,27 @@ $data = $xml->XMLin('data.xml');
 $heritage_name = 0;
 #1 area
 $country = 1;
-#2 subarea
+#2 area
 $area = 2;
-#3 n
-$ido = 3;
-#4 e
-$keido = 4;
-#5~14 classflag
-$c1=5;
-$c2=6;
-$c3=7;
-$c4=8;
-$c5=9;
-$c6=10;
-$c7=11;
-$c8=12;
-$c9=13;
-$c10=14;
+#3 img_url
+$img = 3;
+#4 description
+$txt = 4;
+#5 n
+$ido = 5;
+#6 e
+$keido = 6;
+#7~16 classflag
+$c1=7;
+$c2=8;
+$c3=9;
+$c4=10;
+$c5=11;
+$c6=12;
+$c7=13;
+$c8=14;
+$c9=15;
+$c10=16;
 #################
 
 
@@ -71,10 +75,11 @@ $c10=14;
 $list_ref = $$data{row};
 $i=0;
 for (@$list_ref){
-	#print %{$_}{'site'};
 	$heritage[$i][$heritage_name] = %{$_}{'site'};
 	$heritage[$i][$country] = %{$_}{'states'};
 	$heritage[$i][$area] = %{$_}{'region'};
+	$heritage[$i][$img] = %{$_}{'image_url'};
+	$heritage[$i][$txt] = %{$_}{'short_description'};
 	if(%{$_}{'latitude'} =~ /[0-9][0-9][0-9][0-9][0-9][0-9]/){
 		$heritage[$i][$ido] = %{$_}{'latitude'};
 	}else{
@@ -116,7 +121,7 @@ for (@$list_ref){
 	$i++;
 }
 #sql用にクオーテーションをエスケープ
-for($a=0; $a<3; $a++){
+for($a=0; $a<5; $a++){
 	for($b=0; $b<$i; $b++){
 	if ($heritage[$b][$a] =~ /\'/){
 		$heritage[$b][$a] =~ s/\'/\'\'/g;
