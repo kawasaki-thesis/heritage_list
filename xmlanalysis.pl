@@ -75,19 +75,23 @@ for (@$list_ref){
 	$heritage[$i][$heritage_name] = %{$_}{'site'};
 	$heritage[$i][$country] = %{$_}{'states'};
 	$heritage[$i][$area] = %{$_}{'region'};
-	if(%{$_}{'latitude'} =~ /[0-9][0-9][0-9][0-9]/){
+	if(%{$_}{'latitude'} =~ /[0-9][0-9][0-9][0-9][0-9][0-9]/){
 		$heritage[$i][$ido] = %{$_}{'latitude'};
 	}else{
-		print Dumper(%{$_}{'latitude'});
-		print %{$_}{'site'};
-		print " / latitude \n";
+		#print Dumper(%{$_}{'latitude'});
+		#print %{$_}{'site'};
+		#print " / latitude \n";
+		$heritage[$i][$ido] = 'NULL';
+		$heritage[$i][$keido] = 'NULL';
 	}
-	if(%{$_}{'longitude'} =~ /[0-9][0-9][0-9][0-9]/){
+	if(%{$_}{'longitude'} =~ /[0-9][0-9][0-9][0-9][0-9][0-9]/){
 		$heritage[$i][$keido] = %{$_}{'longitude'};
 	}else{
-		print Dumper(%{$_}{'longitude'});
-		print %{$_}{'site'};
-		print " / longitude \n";
+		#print Dumper(%{$_}{'longitude'});
+		#print %{$_}{'site'};
+		#print " / longitude \n";
+		$heritage[$i][$ido] = 'NULL';
+		$heritage[$i][$keido] = 'NULL';
 	}
 	
 	#criterion
@@ -121,13 +125,11 @@ for($a=0; $a<3; $a++){
 	}
 }
 
-print "------ $j error -------------------------\n\n";
-
 #正しそうなデータをINSERTINTOで出力
 foreach (@heritage){
 	if(@{$_}){
 		print "INSERT INTO world_heritage VALUES(";
-		print join(", ", @{$_});
+		print encode('utf-8', join(", ", @{$_}));
 		print ");";
 		print"\n";
 		#jをカンマで横に並べてi行表示
